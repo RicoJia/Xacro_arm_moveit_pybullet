@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot_arm">
+
+  <xacro:property name="grey_mat">
+      <material name="arm_grey_mat">
+        <color rgba="0.75 0.75 0.75 1.0" />
+      </material>
+  </xacro:property>
+
+  <xacro:property name="yellow_mat">
+      <material name="arm_yellow_mat">
+        <color rgba="1 1 0 1.0" />
+      </material>
+  </xacro:property>
+
+  <xacro:property name="red" value="red"/>
+  <xacro:property name="yellow" value="yellow"/>
+
+
+  <xacro:macro name="arm" params="name color origin_xyz origin_rpy length radius">
+    <link name="${name}">
+      <visual>
+        <origin xyz="${origin_xyz}" rpy="${origin_rpy}"/>
+        <geometry>
+            <cylinder length="${length}" radius="${radius}"/>
+         </geometry>
+         <xacro:if value="${color=='yellow'}">
+           <xacro:insert_block name="yellow_mat"/>
+         </xacro:if>
+         <xacro:if value="${color=='grey'}">
+           <xacro:insert_block name="grey_mat"/>
+         </xacro:if>
+      </visual>
+        <collision>
+            <origin xyz="${origin_xyz}" rpy="${origin_rpy}"/>
+            <geometry>
+                <cylinder length="${length}" radius="${radius}"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="0.1" />
+            <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+<!--        <gazebo>-->
+<!--            <minDepth>-->
+<!--        </gazebo>-->
+    </link>
+  </xacro:macro>
+
+
+
+  <xacro:macro name="arm_joint" params="name type origin_xyz origin_rpy parent child axis">
+    <joint name="${name}" type="${type}">
+        <origin rpy="${origin_rpy}" xyz="${origin_xyz}"/>
+      <parent link="${parent}" />
+      <child link="${child}" />
+      <xacro:unless value="${type=='fixed'}">
+        <limit lower="-3.142" upper="3.142" effort="100" velocity="100" />
+        <axis xyz="${axis}"/>
+        <gazebo>
+            <dynamics damping="0.01"/>
+            <dynamics friction="0.01"/>
+        </gazebo>
+        <!--        ??not sure if this is necessary, should be specified in a gazebo file??-->
+        <safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-3.142" soft_upper_limit="3.142" />
+      </xacro:unless>
+    </joint>
+  </xacro:macro>
+
+</robot>

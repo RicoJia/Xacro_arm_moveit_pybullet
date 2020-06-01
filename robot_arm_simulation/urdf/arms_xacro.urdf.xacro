@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot_arm">
+    <xacro:property name="arm_params" value="${load_yaml('$(find robot_arm_simulation)/config/params.yaml')}" />
+    <xacro:include filename="$(find robot_arm_simulation)/urdf/component_definitions.xacro" />
+
+    <!--    link-->
+    <!-- Used for fixing robot to Gazebo 'base_link' -->
+    <link name="world"/>
+
+    <!--rpy="${arm_params['PI']/2} 0 0" />-->
+    <xacro:arm name="upper_arm"
+            color="grey"
+            origin_xyz="${arm_params['L1']/2.0} 0 0" origin_rpy="0 ${pi/2.0} 0"
+            length="${arm_params['L1']}"
+            radius="${arm_params['r1']}"/>
+
+    <xacro:arm_joint name="base_link_upper_arm"
+           type="revolute"
+           origin_xyz = "0.0 0.0 0.0" origin_rpy="0 0 0"
+           parent = "world"
+           child = "upper_arm"
+           axis = "0 0 1"/>
+
+    <xacro:arm name="lower_arm"
+            color="grey"
+            origin_xyz="${arm_params['L1']/2.0} 0 0" origin_rpy="0 ${pi/2.0} 0"
+            length="${arm_params['L2']}"
+            radius="${arm_params['r2']}"/>
+
+    <xacro:arm_joint name="upper_arm_lower_arm"
+           type="revolute"
+           origin_xyz = "${arm_params['L1']/2.0+arm_params['L2']/2.0} 0.0 0.0" origin_rpy="0 0 0"
+           child = "lower_arm"
+           parent = "upper_arm"
+           axis = "0 0 1"/>
+
+    <xacro:arm name="gripper_arm"
+            color="yellow"
+            origin_xyz="${arm_params['L3']/2.0} 0 0" origin_rpy="0 ${pi/2.0} 0"
+            length="${arm_params['L3']}"
+            radius="${arm_params['r3']}"/>
+
+    <xacro:arm_joint name="lower_arm_gripper_arm"
+           type="revolute"
+           origin_xyz = "${arm_params['L1']/2.0+arm_params['L2']/2.0} 0.0 0.0" origin_rpy="0 0 0"
+           parent = "lower_arm"
+           child = "gripper_arm"
+           axis = "0 0 1"/>
+
+    <xacro:arm name="end_effector"
+            color="yellow"
+            origin_xyz="0.0 0 0" origin_rpy="0 ${pi/2.0} 0"
+            length="0.01"
+            radius="0.01"/>
+
+    <xacro:arm_joint name="gripper_arm_end_effector"
+           type="fixed"
+           origin_xyz = "${0.01/2.0+arm_params['L3']/2.0} 0.0 0.0" origin_rpy="0 0 0"
+           child = "end_effector"
+           parent = "gripper_arm"
+           axis = "0 0 1"/>
+</robot>
+
+

@@ -1,0 +1,38 @@
+<launch>
+<!--  &lt;!&ndash; load the urdf into the parameter server &ndash;&gt;-->
+<!--  <param name="robot_description" command="$(find xacro)/xacro &#45;&#45;inorder '$(find robot_arm_simulation)/urdf/arms.xacro'"/>-->
+<!--&lt;!&ndash;  <param name="robot_description" textfile="$(find robot_arm_simulation)/urdf/arms.urdf" />&ndash;&gt;-->
+
+<!--  &lt;!&ndash; The robot_state_publisher reads the urdf from /robot_description parameter-->
+<!--       and listens to joint information on the /joint_states topic &ndash;&gt;-->
+<!--  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>-->
+
+<!--  &lt;!&ndash; The joint state publisher will be launched with a gui, read the urdf from /robot_description-->
+<!--       and publish the joint values on /joint_states &ndash;&gt;-->
+<!--  <arg name="use_gui" default = "false"/>-->
+<!--  <node name="joint_state_publisher" pkg="joint_state_publisher" if="$(arg use_gui)" type="joint_state_publisher">-->
+<!--    <param name="use_gui" value="$(arg use_gui)" />-->
+<!--  </node  >-->
+
+<!--  <node name = "heart_drawing_arm" pkg = "robot_arm_simulation" unless="$(arg use_gui)" type = "robot_arm_simulation">-->
+<!--    <rosparam file="$(find robot_arm_simulation)/config/params.yaml" />-->
+<!--  </node>-->
+
+<!--  &lt;!&ndash; rviz will enable us to see the robot &ndash;&gt;-->
+<!--  <arg name="rviz_launch" default="true"/>-->
+<!--&lt;!&ndash;  <group if="$(arg rviz_launch)" >&ndash;&gt;-->
+<!--    <node name="rviz" pkg="rviz" type="rviz" if="$(arg rviz_launch)" args="-d $(find robot_arm_simulation)/rviz/view_robot.rviz" required="true"/>-->
+<!--&lt;!&ndash;  </group>&ndash;&gt;-->
+
+    <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+      <arg name="paused" value="true"/>
+      <arg name="use_sim_time" value="true"/>
+      <arg name="gui" value="true"/>
+      <arg name="recording" value="false"/>
+      <arg name="debug" value="false"/>
+    </include>
+
+    <arg name="z" value="0.5"/>
+   <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-file $(find robot_arm_simulation)/urdf/arms_xacro.urdf -urdf -z $(arg z) -model robot_arm" />
+</launch>

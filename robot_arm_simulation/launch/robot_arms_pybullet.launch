@@ -1,0 +1,8 @@
+<launch>
+    <include file="$(find robot_arm_moveit_config)/launch/demo.launch">
+    </include>
+
+    <node name="robot_arm_pybullet_simulator" type="robot_arm_pybullet_simulator" pkg="robot_arm_simulation" required="true"/>
+
+    <arg name="z" value="0.5"/>
+</launch>

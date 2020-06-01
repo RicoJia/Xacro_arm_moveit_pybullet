@@ -1,0 +1,14 @@
+# Dexterous space: circular area 2 x 2.
+
+
+L1: 1
+L2: 1
+L3: 0.2
+r1: 0.2
+r2: 0.1
+r3: 0.05
+T: 10.0
+dt: 0.01
+T1: 1.0
+T_marker: 0.05
+

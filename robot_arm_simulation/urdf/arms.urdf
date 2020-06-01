@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<robot name="penarm">
+<!--  This is a dummy link -->
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <sphere radius="0.0" />
+      </geometry>
+    </visual>
+  </link>
+
+<link name="upper_arm">
+    <visual>
+      <origin xyz="0.5 0 0.0" rpy="0 1.5708 0"/>
+      <geometry>
+        <cylinder length="1.0" radius="0.2"/>
+      </geometry>
+      <material name="red_mat">
+         <color rgba="1 0 0 0.5" />
+     </material>
+    </visual>
+  </link>
+
+  <joint name="base_link_upper_arm" type="revolute">
+    <origin xyz="0.0 0 0.0" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="upper_arm" />
+    <limit lower="-3.142" upper="3.142" effort="100" velocity="100" />
+    <axis xyz="0 0 1"/>
+ </joint>
+
+  <link name="lower_arm">
+    <visual>
+      <origin xyz="0.5 0 0.0" rpy="0 1.5708 0"/>
+      <geometry>
+        <cylinder length="1.0" radius="0.1"/>
+      </geometry>
+      <material name="pink_mat">
+         <color rgba="1 0.08 0.58 1.0" />
+     </material>
+    </visual>
+  </link>
+
+  <joint name="upper_arm_lower_arm" type="revolute">
+    <origin xyz="1.0 0 0.0" rpy="0 0 0" />
+    <parent link="upper_arm" />
+    <child link="lower_arm" />
+    <limit lower="-3.142" upper="3.142" effort="100" velocity="100" />
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <link name="gripper_arm">
+    <visual>
+      <origin xyz="0.05 0 0.0" rpy="0 1.5708 0"/>
+      <geometry>
+        <cylinder length="0.1" radius="0.05"/>
+      </geometry>
+      <material name="yellow_mat">
+         <color rgba="1 1 0 1.0" />
+     </material>
+    </visual>
+  </link>
+
+  <joint name="lower_arm_gripper_arm" type="revolute">
+    <origin xyz="1.0 0 0.0" rpy="0 0 0" />
+    <parent link="lower_arm" />
+    <child link="gripper_arm" />
+    <limit lower="-3.142" upper="3.142" effort="100" velocity="100" />
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <link name="end_effector">
+    <visual>
+      <geometry>
+        <sphere radius="0.0" />
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="gripper_arm_end_effector" type="fixed">
+    <origin xyz="0.1 0 0.0" rpy="0 0 0" />
+    <parent link="gripper_arm" />
+    <child link="end_effector" />
+  </joint>
+
+
+</robot>
